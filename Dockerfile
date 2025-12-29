@@ -74,7 +74,7 @@ RUN python manage.py collectstatic --noinput --clear
 #   phase facilities of your hosting platform. This is used only so the
 #   Wagtail instance can be started with a simple "docker run" command.
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/sh", "-c", "python manage.py runserver 0.0.0.0:${PORT:-8000}"]
+CMD ["/bin/sh", "-c", "uvicorn core.asgi:application --host 0.0.0.0 --port ${PORT:-8000}"]
 
 # Nginx image to serve static files and reverse-proxy Django.
 FROM nginx:1.27-alpine AS nginx
