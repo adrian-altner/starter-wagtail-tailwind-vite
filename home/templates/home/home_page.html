@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}template-homepage{% endblock body_class %}
+{% block content %}
+
+<main class="min-h-screen bg-white text-slate-900">
+    <section class="relative overflow-hidden">
+        <div class="absolute inset-0 bg-linear-to-br from-amber-50 via-white to-emerald-50"></div>
+        <div class="relative mx-auto max-w-5xl px-6 py-20 sm:py-28">
+            <div class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white/70 px-3 py-1 text-sm text-amber-900">
+                <span class="h-2 w-2 rounded-full bg-amber-400"></span>
+                Wagtail Starter
+            </div>
+            <h1 class="mt-6 text-4xl font-semibold tracking-tight sm:text-6xl">
+                A thoughtful starting point for your next content project
+            </h1>
+            <p class="mt-5 max-w-2xl text-lg text-slate-700">
+                Quick to launch, clearly structured, and ready for real content. Tailwind is
+                wired in, Vite is running, and Wagtail handles the rest.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+                <a class="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm" href="{% url 'wagtailadmin_home' %}">
+                    Open admin
+                </a>
+                <a class="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-900" href="https://docs.wagtail.org/en/stable/topics/index.html">
+                    Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="mx-auto max-w-5xl px-6 py-14">
+        <div class="grid gap-6 sm:grid-cols-3">
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-semibold">Structure that lasts</h3>
+                <p class="mt-2 text-sm text-slate-600">
+                    Apps cleanly separated, core kept lean, focus on content and features.
+                </p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-semibold">Fast into flow</h3>
+                <p class="mt-2 text-sm text-slate-600">
+                    Honcho runs Django and Vite together. Changes show up instantly.
+                </p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-semibold">Design ready</h3>
+                <p class="mt-2 text-sm text-slate-600">
+                    Tailwind v4 is active. Build layouts without detours.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mx-auto max-w-5xl px-6 pb-20">
+        <div class="rounded-3xl bg-slate-900 px-8 py-10 text-white sm:px-10">
+            <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h2 class="text-2xl font-semibold">Ready for the next step?</h2>
+                    <p class="mt-2 text-sm text-slate-200">
+                        Create your first app and start with real content.
+                    </p>
+                </div>
+                <a class="rounded-full bg-white px-5 py-2.5 text-sm font-medium text-slate-900" href="{% url 'wagtailadmin_home' %}">
+                    Create your first page
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock content %}

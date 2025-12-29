@@ -1,0 +1,11 @@
+{
+  "assets/core.css": {
+    "file": "css/core-5hXT3v7J.css",
+    "src": "assets/core.css",
+    "isEntry": true,
+    "name": "core",
+    "names": [
+      "core.css"
+    ]
+  }
+}
