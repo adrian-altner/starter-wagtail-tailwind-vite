@@ -22,6 +22,12 @@ ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split("
 if not ALLOWED_HOSTS:
     raise RuntimeError("ALLOWED_HOSTS is required in production")
 
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
 try:
     from .local import *
 except ImportError:

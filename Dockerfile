@@ -12,7 +12,7 @@ COPY postcss.config.js tailwind.config.js vite.config.js ./
 RUN pnpm build
 
 # Use an official Python runtime based on Debian 12 "bookworm" as a parent image.
-FROM python:3.12-slim-bookworm
+FROM python:3.12-slim-bookworm AS web
 
 # Add user that will be used in the container.
 RUN useradd wagtail
@@ -22,10 +22,10 @@ EXPOSE 8000
 
 # Set environment variables.
 # 1. Force Python stdout and stderr streams to be unbuffered.
-# 2. Set PORT variable that is used by Gunicorn. This should match "EXPOSE"
-#    command.
+# 2. Set PORT variable used by the app server. This should match "EXPOSE".
 ENV PYTHONUNBUFFERED=1 \
-    PORT=8000
+    PORT=8000 \
+    DJANGO_SETTINGS_MODULE=core.settings.production
 
 # Install system packages required by Wagtail and Django.
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
@@ -36,9 +36,6 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
     zlib1g-dev \
     libwebp-dev \
  && rm -rf /var/lib/apt/lists/*
-
-# Install the application server.
-RUN pip install "gunicorn==20.0.4"
 
 # Install the project requirements.
 COPY requirements.txt /
@@ -77,4 +74,12 @@ RUN python manage.py collectstatic --noinput --clear
 #   phase facilities of your hosting platform. This is used only so the
 #   Wagtail instance can be started with a simple "docker run" command.
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["gunicorn", "core.wsgi:application"]
+CMD ["/bin/sh", "-c", "python manage.py runserver 0.0.0.0:${PORT:-8000}"]
+
+# Nginx image to serve static files and reverse-proxy Django.
+FROM nginx:1.27-alpine AS nginx
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=web /app/static /static
+
+# Default build target stays as the Django app image.
+FROM web AS final

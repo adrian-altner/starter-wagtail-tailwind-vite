@@ -1,7 +1,17 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      target: web
     env_file:
       - .env
+    expose:
+      - "8000"
+  nginx:
+    build:
+      context: .
+      target: nginx
+    depends_on:
+      - web
     ports:
-      - "8000:8000"
+      - "8000:80"

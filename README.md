@@ -36,7 +36,7 @@ docker build -t wagtail-prod .
 docker run --rm -p 8000:8000 --env-file .env wagtail-prod
 ```
 
-Alternativ mit Compose:
+Alternativ mit Compose (inkl. nginx als Reverse-Proxy + Static Files):
 
 ```bash
 docker compose up --build
@@ -96,6 +96,7 @@ python manage.py migrate --noinput
 - `DJANGO_SETTINGS_MODULE=core.settings.production`
 - `SECRET_KEY` (z. B. generieren und in `.env` eintragen)
 - `ALLOWED_HOSTS` (kommagetrennt, z. B. `example.com,localhost,127.0.0.1`)
+- `CSRF_TRUSTED_ORIGINS` (kommagetrennt, z. B. `http://localhost:8000,http://127.0.0.1:8000`)
 
 ## Changelog
 
