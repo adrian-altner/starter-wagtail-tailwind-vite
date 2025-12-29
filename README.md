@@ -96,3 +96,7 @@ python manage.py migrate --noinput
 - `DJANGO_SETTINGS_MODULE=core.settings.production`
 - `SECRET_KEY` (z. B. generieren und in `.env` eintragen)
 - `ALLOWED_HOSTS` (kommagetrennt, z. B. `example.com,localhost,127.0.0.1`)
+
+## Changelog
+
+`CHANGELOG.md`.
