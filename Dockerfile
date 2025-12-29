@@ -1,3 +1,16 @@
+# Build frontend assets with Node.
+FROM node:20-slim AS assets
+
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && pnpm install --frozen-lockfile
+COPY assets ./assets
+COPY core/templates ./core/templates
+COPY home/templates ./home/templates
+COPY search/templates ./search/templates
+COPY postcss.config.js tailwind.config.js vite.config.js ./
+RUN pnpm build
+
 # Use an official Python runtime based on Debian 12 "bookworm" as a parent image.
 FROM python:3.12-slim-bookworm
 
@@ -41,6 +54,12 @@ RUN chown wagtail:wagtail /app
 
 # Copy the source code of the project into the container.
 COPY --chown=wagtail:wagtail . .
+# Copy built frontend assets from the assets stage.
+COPY --from=assets --chown=wagtail:wagtail /app/core/static /app/core/static
+
+# Entrypoint script (migrations + optional superuser).
+COPY --chown=wagtail:wagtail scripts/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Use user "wagtail" to run the build commands below and the server itself.
 USER wagtail
@@ -57,4 +76,5 @@ RUN python manage.py collectstatic --noinput --clear
 #   PRACTICE. The database should be migrated manually or using the release
 #   phase facilities of your hosting platform. This is used only so the
 #   Wagtail instance can be started with a simple "docker run" command.
-CMD set -xe; python manage.py migrate --noinput; gunicorn core.wsgi:application
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gunicorn", "core.wsgi:application"]

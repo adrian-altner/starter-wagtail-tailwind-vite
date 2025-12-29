@@ -4,7 +4,6 @@ from pathlib import Path
 
 from django import template
 from django.conf import settings
-from django.templatetags.static import static
 
 register = template.Library()
 
@@ -30,10 +29,20 @@ def _find_entry(manifest, name):
     return None
 
 
+def _static_url(path):
+    return f"{settings.STATIC_URL.rstrip('/')}/{path.lstrip('/')}"
+
+
 @register.simple_tag
 def vite_css(name):
     manifest = _load_manifest()
     entry = _find_entry(manifest, name)
     if not entry:
         return []
-    return [static(css_file) for css_file in entry.get("css", [])]
+    css_files = entry.get("css", [])
+    if css_files:
+        return [_static_url(css_file) for css_file in css_files]
+    entry_file = entry.get("file", "")
+    if entry_file.endswith(".css"):
+        return [_static_url(entry_file)]
+    return []

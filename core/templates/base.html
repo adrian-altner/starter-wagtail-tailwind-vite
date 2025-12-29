@@ -25,9 +25,6 @@
         {% endif %}
 
         {# Global stylesheets #}
-        {% if not DEBUG %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/core.css' %}">
-        {% endif %}
 
         {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
